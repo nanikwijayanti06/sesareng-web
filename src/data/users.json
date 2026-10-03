@@ -1,0 +1,12 @@
+{
+  "users": [
+    {
+      "id": "GOV001",
+      "email": "pemda@sesareng.id",
+      "password": "123456",
+      "role": "government",
+      "agency": "Pemerintah Daerah",
+      "name": "Admin Pemerintah"
+    }
+  ]
+}
