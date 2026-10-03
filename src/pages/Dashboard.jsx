@@ -4,6 +4,7 @@ import {
   Activity,
   ArrowRight,
   Check,
+  ClipboardCheck,
   Building2,
   CheckCircle2,
   ChevronRight,
@@ -16,7 +17,9 @@ import {
   RotateCcw,
   Search,
   Store,
+  ShieldCheck,
   Users,
+  WalletCards,
   Workflow,
 } from "lucide-react";
 import {
@@ -38,7 +41,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import ActorAvatar from "../components/common/ActorAvatar";
 import DashboardLayout from "../components/layout/DashboardLayout";
-import impactData from "../data/impact.json";
+import impactJson from "../data/impact.json";
 import assessmentsData from "../data/assessments.json";
 import interventionData from "../data/interventions.json";
 import locationsData from "../data/locations.json";
@@ -50,14 +53,44 @@ import { getPrimaryBottleneck } from "../logic/assessmentLogic";
 import { getVerifyStatus } from "../logic/monitoringLogic";
 import "../styles/dashboard.css";
 
+const rawImpactData = Array.isArray(impactJson)
+  ? impactJson
+  : impactJson.impact ?? impactJson.timeSeries ?? impactJson.data ?? [];
+const impactData = rawImpactData
+  .map((item) => ({
+    month: item.month,
+    productivityIndex: Number(item.productivityIndex),
+    economicValue: Number(item.economicValue),
+  }))
+  .filter((item) => item.month && Number.isFinite(item.productivityIndex) && Number.isFinite(item.economicValue));
+
 const actors = locationsData.items;
 const regions = [...new Set(actors.map((actor) => actor.region))];
 const stages = interventionData.stages.map((stage) => stage.name);
 
 const activities = [
-  { title: "Diagnose selesai", text: "Hierro Watch menyelesaikan asesmen awal.", time: "10 menit lalu", icon: CheckCircle2 },
-  { title: "Provider terhubung", text: "Jogja Media Training terhubung ke Bakpia Kencana.", time: "1 jam lalu", icon: Users },
-  { title: "Tahap Enable dimulai", text: "Dukungan adopsi teknologi untuk Batik Astoetik.", time: "3 jam lalu", icon: Workflow },
+  { title: "Match disetujui", actor: "Admin Pemerintah", text: "Hierro Watch · Gmedia dan UGM", time: "10 menit lalu", icon: CheckCircle2 },
+  { title: "Voucher diperbarui", actor: "Admin Pemerintah", text: "Bakpia Kencana · Productivity Voucher", time: "35 menit lalu", icon: WalletCards },
+  { title: "University partner ditugaskan", actor: "Admin Pemerintah", text: "UGM · Hierro Watch", time: "1 jam lalu", icon: GraduationCap },
+  { title: "Verify diperbarui", actor: "Admin Pemerintah", text: "Batik Astoetik · outcome produktivitas", time: "2 jam lalu", icon: Activity },
+  { title: "Provider diverifikasi", actor: "Admin Pemerintah", text: "Gmedia · Technology Provider", time: "3 jam lalu", icon: Building2 },
+];
+
+const operationTasks = [
+  { id: "assessment", title: "Assessment Hierro Watch", description: "Tinjau readiness dan validasi assessment.", action: "Validasi", route: "/arpi?stage=diagnose", icon: ClipboardCheck },
+  { id: "match", title: "Match Bakpia Kencana", description: "Rekomendasi intervention menunggu approval.", action: "Setujui", route: "/arpi?stage=match", icon: CheckCircle2 },
+  { id: "provider", title: "Provider Gmedia", description: "Verifikasi akreditasi mitra teknologi.", action: "Verifikasi", route: "/provider", icon: ShieldCheck },
+  { id: "verify", title: "Verify Batik Astoetik", description: "Review hasil before-after terhadap target.", action: "Review", route: "/arpi?stage=verify", icon: Activity },
+  { id: "adapt", title: "Adapt Decision", description: "Tetapkan tindak lanjut hasil monitoring.", action: "Tetapkan", route: "/arpi?stage=adapt", icon: Workflow },
+];
+
+const quickActions = [
+  { title: "Tambah UMKM", route: "/umkm?action=create", icon: Plus },
+  { title: "Validasi Assessment", route: "/arpi?stage=diagnose", icon: ClipboardCheck },
+  { title: "Assign Provider", route: "/provider", icon: Users },
+  { title: "Alokasikan Voucher", route: "/arpi?stage=enable", icon: WalletCards },
+  { title: "Buka Adoption Clinic", route: "/arpi?stage=adopt", icon: Workflow },
+  { title: "Input Verify", route: "/arpi?stage=verify", icon: CheckCircle2 },
 ];
 
 const markerColors = {
@@ -98,6 +131,7 @@ function Dashboard() {
   const [stage, setStage] = useState("");
   const [diagnoseProfile, setDiagnoseProfile] = useState("");
   const [impactPeriod, setImpactPeriod] = useState("6");
+  const [impactView, setImpactView] = useState("both");
   const [selectedImpactMonth, setSelectedImpactMonth] = useState("");
   const [globalFilters, setGlobalFilters] = useState({ region: "", sector: "", stage: "", status: "" });
   const [matchQueue, setMatchQueue] = useState(interventionData.matches);
@@ -145,18 +179,22 @@ function Dashboard() {
   }, [search, region, actorType, stage, diagnoseProfile, globalFilters]);
 
   const metrics = [
-    { label: "Total UMKM", value: filteredUmkm.length, note: "Sesuai filter aktif", icon: Store, route: "/umkm" },
-    { label: "Provider Aktif", value: filteredProviders.filter((item) => item.status !== "Nonaktif").length, note: "Mitra layanan aktif", icon: Building2, route: "/provider" },
-    { label: "Perguruan Tinggi", value: filteredUniversities.filter((item) => item.status !== "Nonaktif").length, note: "Mitra akademik aktif", icon: GraduationCap, route: "/universitas" },
-    { label: "Intervensi Aktif", value: filteredUmkm.filter((item) => ["Enable", "Adopt"].includes(item.stage)).length, note: "Tahap Enable/Adopt", icon: Activity, route: "/arpi" },
-    { label: "Verify Pending", value: interventionData.verify.filter((item) => filteredUmkm.some((umkm) => umkm.id === item.umkmId)).filter((item) => item.metrics.some((metric) => getVerifyStatus(metric.actual, metric.target, metric.lowerIsBetter) !== "Target Tercapai")).length, note: "Perlu validasi outcome", icon: CheckCircle2, route: "/arpi?stage=verify" },
-    { label: "Adapt Pending", value: interventionData.adapt.filter((item) => filteredUmkm.some((umkm) => umkm.id === item.umkmId) && item.followUpStatus !== "Selesai").length, note: "Tindak lanjut terbuka", icon: Workflow, route: "/arpi?stage=adapt" },
+    { label: "Total UMKM", value: filteredUmkm.length, note: "Sesuai filter aktif", icon: Store, route: "/umkm", tone: "metric-navy" },
+    { label: "Provider Aktif", value: filteredProviders.filter((item) => item.status !== "Nonaktif").length, note: "Mitra layanan aktif", icon: Building2, route: "/provider", tone: "metric-blue" },
+    { label: "Perguruan Tinggi", value: filteredUniversities.filter((item) => item.status !== "Nonaktif").length, note: "Mitra akademik aktif", icon: GraduationCap, route: "/universitas", tone: "metric-teal" },
+    { label: "Intervensi Aktif", value: filteredUmkm.filter((item) => ["Enable", "Adopt"].includes(item.stage)).length, note: "Tahap Enable/Adopt", icon: Activity, route: "/arpi", tone: "metric-green" },
+    { label: "Verify Pending", value: interventionData.verify.filter((item) => filteredUmkm.some((umkm) => umkm.id === item.umkmId)).filter((item) => item.metrics.some((metric) => getVerifyStatus(metric.actual, metric.target, metric.lowerIsBetter) !== "Target Tercapai")).length, note: "Perlu validasi outcome", icon: CheckCircle2, route: "/arpi?stage=verify", tone: "metric-amber" },
+    { label: "Adapt Pending", value: interventionData.adapt.filter((item) => filteredUmkm.some((umkm) => umkm.id === item.umkmId) && item.followUpStatus !== "Selesai").length, note: "Tindak lanjut terbuka", icon: Workflow, route: "/arpi?stage=adapt", tone: "metric-red" },
   ];
-  const visibleImpact = impactData.timeSeries.slice(-Number(impactPeriod));
-  const firstImpact = impactData.timeSeries[0];
-  const latestImpact = visibleImpact.find((item) => item.month === selectedImpactMonth) ?? visibleImpact[visibleImpact.length - 1];
-  const productivityGrowth = Math.round(((latestImpact.productivityIndex / firstImpact.productivityIndex) - 1) * 100);
-  const economicGrowth = Math.round(((latestImpact.economicValue / firstImpact.economicValue) - 1) * 100);
+  const filteredImpactData = impactData.slice(-Number(impactPeriod));
+  const displayedImpactData = filteredImpactData.length > 0 ? filteredImpactData : impactData;
+  const firstImpact = impactData[0] ?? { productivityIndex: 0, economicValue: 0 };
+  const focusMonth = displayedImpactData.some((item) => item.month === selectedImpactMonth)
+    ? selectedImpactMonth
+    : displayedImpactData[displayedImpactData.length - 1]?.month;
+  const latestImpact = displayedImpactData.find((item) => item.month === focusMonth) ?? displayedImpactData[displayedImpactData.length - 1] ?? firstImpact;
+  const productivityGrowth = firstImpact.productivityIndex ? Math.round(((latestImpact.productivityIndex / firstImpact.productivityIndex) - 1) * 100) : 0;
+  const economicGrowth = firstImpact.economicValue ? Math.round(((latestImpact.economicValue / firstImpact.economicValue) - 1) * 100) : 0;
   const currentAssessmentIds = new Set(filteredUmkm.map((item) => item.assessmentId));
   const bottleneckDistribution = assessmentsData.assessments
     .filter((item) => currentAssessmentIds.has(item.id))
@@ -221,15 +259,13 @@ function Dashboard() {
         </section>
 
         <section className="dashboard-metrics" aria-label="Ringkasan ekosistem">
-          {metrics.map(({ label, value, note, icon: Icon, route }) => (
-            <button className="dashboard-metric" key={label} onClick={() => navigate(route)} type="button">
-              <span className="metric-icon"><Icon size={19} /></span>
-              <span className="metric-copy">
-                <span className="metric-label">{label}</span>
-                <strong>{value}</strong>
-                <span className="metric-note">{note}</span>
-              </span>
-              <ChevronRight className="metric-chevron" size={17} />
+          {metrics.map(({ label, value, note, icon: Icon, route, tone }) => (
+            <button className={`dashboard-metric ${tone}`} key={label} onClick={() => navigate(route)} type="button">
+              <span className="metric-label">{label}</span>
+              <Icon className="metric-icon" size={19} />
+              <strong className="metric-number">{value}</strong>
+              <span className="metric-note">{note}</span>
+              <ChevronRight className="metric-chevron" size={15} />
             </button>
           ))}
         </section>
@@ -350,13 +386,19 @@ function Dashboard() {
                 <option value="6">6 bulan</option>
               </select>
             </label>
+            <div aria-label="Pilihan metrik grafik" className="impact-mode-toggle" role="group">
+              <button aria-pressed={impactView === "productivity"} className={impactView === "productivity" ? "is-active" : ""} onClick={() => setImpactView("productivity")} type="button">Productivity</button>
+              <button aria-pressed={impactView === "economic"} className={impactView === "economic" ? "is-active" : ""} onClick={() => setImpactView("economic")} type="button">Economic Value</button>
+              <button aria-pressed={impactView === "both"} className={impactView === "both" ? "is-active" : ""} onClick={() => setImpactView("both")} type="button">Keduanya</button>
+            </div>
             <label className="impact-period">
               <span>Fokus bulan</span>
-              <select aria-label="Fokus bulan grafik dampak" onChange={(event) => setSelectedImpactMonth(event.target.value)} value={visibleImpact.some((item) => item.month === selectedImpactMonth) ? selectedImpactMonth : visibleImpact[visibleImpact.length - 1].month}>
-                {visibleImpact.map((item) => <option key={item.month} value={item.month}>{item.month}</option>)}
+              <select aria-label="Fokus bulan grafik dampak" onChange={(event) => setSelectedImpactMonth(event.target.value)} value={focusMonth ?? ""}>
+                {displayedImpactData.map((item) => <option key={item.month} value={item.month}>{item.month}</option>)}
               </select>
             </label>
           </div>
+          {impactData.length === 0 ? <p className="impact-empty-state">Data track record belum tersedia.</p> : <>
           <div className="impact-summaries">
             <article className="impact-summary">
               <span>Produktivitas</span>
@@ -369,44 +411,45 @@ function Dashboard() {
               <small>Perubahan agregat Jan-{latestImpact.month}</small>
             </article>
           </div>
-          <div className="impact-chart-grid">
-            <article className="dashboard-panel impact-chart-card">
+          <div className={`impact-chart-grid impact-view-${impactView}`}>
+            {impactView !== "economic" && <article className="dashboard-panel impact-chart-card">
               <div className="impact-chart-title">
                 <h3>Track Record Produktivitas</h3>
                 <span>Data simulasi/prototipe</span>
               </div>
-              <div className="impact-chart">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={visibleImpact} margin={{ top: 12, right: 12, bottom: 2, left: -12 }} onClick={(state) => state?.activeLabel && setSelectedImpactMonth(state.activeLabel)}>
-                    <CartesianGrid stroke="#e8edf3" strokeDasharray="3 3" />
-                    <XAxis dataKey="month" tickLine={false} axisLine={false} />
-                    <YAxis domain={["dataMin - 3", "dataMax + 3"]} tickLine={false} axisLine={false} width={42} />
+              <div className="impact-chart-container">
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={displayedImpactData} margin={{ top: 20, right: 25, left: 5, bottom: 10 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#dfe5ec" vertical={false} />
+                    <XAxis dataKey="month" tick={{ fill: "#6b7b8d", fontSize: 12 }} axisLine={{ stroke: "#cfd8e3" }} tickLine={false} />
+                    <YAxis domain={["auto", "auto"]} tick={{ fill: "#6b7b8d", fontSize: 12 }} axisLine={false} tickLine={false} />
                     <Tooltip formatter={(value) => Number(value).toLocaleString("id-ID")} />
-                    <Legend onClick={() => setSelectedImpactMonth(visibleImpact[visibleImpact.length - 1]?.month ?? "")} />
-                    <Line name="Indeks produktivitas" type="monotone" dataKey="productivityIndex" stroke="#2864c8" strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                    <Legend />
+                    <Line name="Indeks produktivitas" type="monotone" dataKey="productivityIndex" stroke="#2d63c8" strokeWidth={3} dot={(props) => <circle cx={props.cx} cy={props.cy} r={props.payload?.month === focusMonth ? 6 : 4} fill={props.payload?.month === focusMonth ? "#2d63c8" : "#ffffff"} stroke="#2d63c8" strokeWidth={2} />} activeDot={{ r: 6, fill: "#2d63c8" }} connectNulls isAnimationActive={false} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
-            </article>
-            <article className="dashboard-panel impact-chart-card">
+            </article>}
+            {impactView !== "productivity" && <article className="dashboard-panel impact-chart-card">
               <div className="impact-chart-title">
                 <h3>Track Record Nilai Ekonomi</h3>
                 <span>Data simulasi/prototipe</span>
               </div>
-              <div className="impact-chart">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={visibleImpact} margin={{ top: 12, right: 12, bottom: 2, left: -12 }} onClick={(state) => state?.activeLabel && setSelectedImpactMonth(state.activeLabel)}>
-                    <CartesianGrid stroke="#e8edf3" strokeDasharray="3 3" />
-                    <XAxis dataKey="month" tickLine={false} axisLine={false} />
-                    <YAxis domain={["dataMin - 0.15", "dataMax + 0.15"]} tickLine={false} axisLine={false} width={42} />
+              <div className="impact-chart-container">
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={displayedImpactData} margin={{ top: 20, right: 25, left: 5, bottom: 10 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#dfe5ec" vertical={false} />
+                    <XAxis dataKey="month" tick={{ fill: "#6b7b8d", fontSize: 12 }} axisLine={{ stroke: "#cfd8e3" }} tickLine={false} />
+                    <YAxis domain={["auto", "auto"]} tick={{ fill: "#6b7b8d", fontSize: 12 }} axisLine={false} tickLine={false} />
                     <Tooltip formatter={(value) => Number(value).toLocaleString("id-ID")} />
-                    <Legend onClick={() => setSelectedImpactMonth(visibleImpact[visibleImpact.length - 1]?.month ?? "")} />
-                    <Line name="Nilai ekonomi agregat" type="monotone" dataKey="economicValue" stroke="#138579" strokeWidth={2.5} dot={{ r: 3 }} activeDot={{ r: 5 }} />
+                    <Legend />
+                    <Line name="Nilai ekonomi agregat" type="monotone" dataKey="economicValue" stroke="#138579" strokeWidth={3} dot={(props) => <circle cx={props.cx} cy={props.cy} r={props.payload?.month === focusMonth ? 6 : 4} fill={props.payload?.month === focusMonth ? "#138579" : "#ffffff"} stroke="#138579" strokeWidth={2} />} activeDot={{ r: 6, fill: "#138579" }} connectNulls isAnimationActive={false} />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
-            </article>
+            </article>}
           </div>
+          </>}
         </section>
 
         <section className="dashboard-lower-grid">
@@ -440,15 +483,15 @@ function Dashboard() {
             </div>
             <div className="bottleneck-list">
               {Object.entries(bottleneckDistribution).map(([name, count]) => (
-                <div className="bottleneck-item" key={name}>
+                <button className="bottleneck-item bottleneck-action" key={name} onClick={() => navigate(`/umkm?bottleneck=${encodeURIComponent(name)}`)} type="button">
                   <div className="bottleneck-label"><span>{name}</span><strong>{count} UMKM</strong></div>
                   <div className="bottleneck-track"><span style={{ width: `${Math.round((count / Math.max(1, ...Object.values(bottleneckDistribution))) * 100)}%` }} /></div>
-                </div>
+                </button>
               ))}
             </div>
           </article>
 
-          <article className="dashboard-panel activity-panel">
+          <article className="dashboard-panel activity-panel" id="activity-panel">
             <div className="panel-heading">
               <div>
                 <p className="panel-kicker">PEMANTAUAN</p>
@@ -457,10 +500,10 @@ function Dashboard() {
               <Activity size={18} className="activity-heading-icon" />
             </div>
             <div className="activity-list">
-              {activities.map(({ title, text, time, icon: Icon }) => (
+              {activities.map(({ title, actor, text, time, icon: Icon }) => (
                 <div className="activity-row" key={title}>
                   <span className="activity-icon"><Icon size={16} /></span>
-                  <div><strong>{title}</strong><p>{text}</p><time>{time}</time></div>
+                  <div><strong>{title}</strong><p><span className="activity-actor">{actor}</span> · {text}</p><time>{time}</time></div>
                 </div>
               ))}
             </div>
@@ -469,23 +512,27 @@ function Dashboard() {
 
         <section className="dashboard-panel approval-queue-panel">
           <div className="panel-heading">
-            <div><p className="panel-kicker">PERSETUJUAN</p><h2>Approval Queue</h2></div>
-            <span className="admin-status status-warning">{matchQueue.filter((item) => item.status === "Review").length} perlu review</span>
+            <div><p className="panel-kicker">OPERASI HARI INI</p><h2>Perlu Tindakan</h2></div>
+            <span className="admin-status status-warning">{operationTasks.filter((task) => task.id !== "match" || matchQueue.some((item) => item.status === "Review")).length} antrean</span>
           </div>
           <div className="approval-queue-list">
-            {matchQueue.filter((item) => item.status === "Review").map((item) => {
-              const umkm = umkmData.items.find((record) => record.id === item.umkmId);
-              const intervention = interventionData.interventions.find((record) => record.id === item.interventionId);
+            {operationTasks.filter((task) => task.id !== "match" || matchQueue.some((item) => item.status === "Review")).map((task) => {
+              const TaskIcon = task.icon;
               return (
-                <div className="approval-queue-row" key={item.umkmId}>
-                  <ActorAvatar assetKey={umkm?.imageKey} name={umkm?.name ?? item.umkmId} />
-                  <div className="approval-queue-copy"><strong>{umkm?.name ?? item.umkmId}</strong><span>{intervention?.name} · {item.aiAppropriateness}</span></div>
-                  <button className="admin-button" onClick={() => navigate(`/arpi?stage=match&umkmId=${item.umkmId}`)} type="button">Review</button>
-                  <button className="admin-button primary" onClick={() => setMatchQueue((current) => current.map((entry) => entry.umkmId === item.umkmId ? { ...entry, status: "Recommended", approved: true } : entry))} type="button"><Check size={14} /> Approve</button>
+                <div className="approval-queue-row" key={task.id}>
+                  <span className="queue-task-icon"><TaskIcon size={16} /></span>
+                  <div className="approval-queue-copy"><strong>{task.title}</strong><span>{task.description} · Data simulasi/prototipe</span></div>
+                  <button className={`admin-button${task.id === "match" ? " primary" : ""}`} onClick={() => {
+                    if (task.id === "match") {
+                      setMatchQueue((current) => current.map((entry) => entry.status === "Review" ? { ...entry, status: "Recommended", approved: true } : entry));
+                    } else {
+                      navigate(task.route);
+                    }
+                  }} type="button">{task.action}{task.id === "match" && <Check size={14} />}</button>
                 </div>
               );
             })}
-            {matchQueue.every((item) => item.status !== "Review") && <p className="admin-empty-state">Approval queue kosong.</p>}
+            {matchQueue.every((item) => item.status !== "Review") && <p className="admin-empty-state">Tidak ada match yang menunggu approval.</p>}
           </div>
         </section>
 
@@ -496,6 +543,11 @@ function Dashboard() {
               <h2>Quick Actions & Direktori</h2>
             </div>
             <button className="panel-link" onClick={() => navigate("/map")} type="button">Jelajahi ekosistem <ArrowRight size={14} /></button>
+          </div>
+          <div className="quick-action-grid">
+            {quickActions.map(({ title, route, icon: Icon }) => (
+              <button className="quick-action-button" key={title} onClick={() => navigate(route)} type="button"><Icon size={16} /><span>{title}</span><ArrowRight size={13} /></button>
+            ))}
           </div>
           <div className="directory-grid">
             {previews.map(({ title, count, route, icon: Icon, items }) => (

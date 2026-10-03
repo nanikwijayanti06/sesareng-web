@@ -36,10 +36,10 @@ function ArpiProgramView() {
   };
 
   const summaries = [
-    { label: "Total UMKM", value: arpiRecords.length, note: "Terdaftar dalam prototipe", icon: ClipboardCheck, tone: "" },
-    { label: "Diagnose", value: arpiRecords.filter((record) => record.assessmentStatus === "Selesai").length, note: "Assessment selesai", icon: Landmark, tone: "" },
-    { label: "Intervensi Aktif", value: arpiRecords.filter((record) => ["Enable", "Adopt"].includes(record.stage)).length, note: "Tahap Enable dan Adopt", icon: WalletCards, tone: "arpi-summary-teal" },
-    { label: "Verify Pending", value: arpiRecords.filter((record) => record.verify.overallStatus !== "Target Tercapai").length, note: "Perlu tindak lanjut", icon: Gauge, tone: "" },
+    { label: "Total UMKM", value: arpiRecords.length, note: "Terdaftar dalam prototipe", icon: ClipboardCheck, tone: "summary-navy" },
+    { label: "Diagnose", value: arpiRecords.filter((record) => record.assessmentStatus === "Selesai").length, note: "Assessment selesai", icon: Landmark, tone: "summary-blue" },
+    { label: "Intervensi Aktif", value: arpiRecords.filter((record) => ["Enable", "Adopt"].includes(record.stage)).length, note: "Tahap Enable dan Adopt", icon: WalletCards, tone: "summary-teal" },
+    { label: "Verify Pending", value: arpiRecords.filter((record) => record.verify.overallStatus !== "Target Tercapai").length, note: "Perlu tindak lanjut", icon: Gauge, tone: "summary-amber" },
   ];
 
   const panels = [

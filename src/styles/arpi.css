@@ -193,3 +193,30 @@
 	.verify-edit-metric { grid-template-columns: minmax(0, 1fr); }
 	.arpi-match-admin-controls { grid-template-columns: minmax(0, 1fr); }
 }
+
+.arpi-summary-card { min-height: 88px; border: 1px solid transparent; border-radius: 6px; background: #17324f; box-shadow: none; color: #fff; }
+.arpi-summary-card.summary-navy { background: #17324f; }
+.arpi-summary-card.summary-blue { background: #2d63c8; }
+.arpi-summary-card.summary-teal { background: #138579; }
+.arpi-summary-card.summary-amber { background: #b67b18; }
+.arpi-summary-card.summary-red { background: #a94442; }
+.arpi-summary-card span, .arpi-summary-card small, .arpi-summary-card strong { color: #fff; }
+.arpi-summary-card span, .arpi-summary-card small { color: #ffffffd6; }
+.arpi-summary-label { gap: 6px; }
+.arpi-summary-label svg { color: #fff; }
+.arpi-summary-card strong { font-size: 24px; }
+.arpi-step.is-current { background: #f0f4fa; color: #17324f; }
+.arpi-step.is-current .arpi-step-marker { border-color: #17324f; border-radius: 4px; background: #17324f; }
+.arpi-step-marker { border-radius: 4px; }
+.arpi-step.is-complete .arpi-step-marker { border-color: #138579; border-radius: 4px; background: #138579; color: white; }
+.arpi-tabs button.is-active { border-bottom-color: #17324f; background: #f0f4fa; color: #17324f; }
+.arpi-panel, .arpi-card { border-color: #d8e0e8; border-radius: 6px; box-shadow: none; }
+.arpi-progress-bar { border-radius: 2px; }
+.arpi-progress-bar span { border-radius: 2px; }
+.status-success { background: #edf5ef; color: #2f7d57; }
+.status-warning { background: #fbf5e8; color: #966610; }
+.status-danger { background: #faeeee; color: #a94442; }
+
+@media (max-width: 700px) {
+	.arpi-summary-card { min-height: 80px; }
+}

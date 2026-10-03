@@ -8,7 +8,7 @@ import StatusBadge from "../components/common/StatusBadge";
 import DashboardLayout from "../components/layout/DashboardLayout";
 import assessmentsData from "../data/assessments.json";
 import umkmData from "../data/umkm.json";
-import { filterByProfile, filterBySearch, filterByStage } from "../logic/filterLogic";
+import { filterByBottleneck, filterByProfile, filterBySearch, filterByStage } from "../logic/filterLogic";
 import { exportCsv } from "../logic/exportLogic";
 import { getPrimaryBottleneck } from "../logic/assessmentLogic";
 import "../styles/catalog.css";
@@ -34,7 +34,7 @@ function Umkm() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [records, setRecords] = useState(makeInitialRecords);
-  const [filters, setFilters] = useState({ search: "", region: "", profile: "", stage: "", status: "" });
+  const [filters, setFilters] = useState(() => ({ search: searchParams.get("search") ?? "", bottleneck: searchParams.get("bottleneck") ?? "", region: "", profile: "", stage: "", status: "" }));
   const [dialog, setDialog] = useState(() => searchParams.get("action") === "create" ? { mode: "create" } : null);
   const [form, setForm] = useState(blankForm);
   const [archiveTarget, setArchiveTarget] = useState(null);
@@ -42,6 +42,7 @@ function Umkm() {
 
   const visibleRecords = useMemo(() => {
     let result = filterBySearch(records, filters.search, ["name", "sector", "location", "primaryBottleneck"]);
+    result = filterByBottleneck(result, filters.bottleneck, ["primaryBottleneck"]);
     result = filterByProfile(result, filters.profile);
     result = filterByStage(result, filters.stage);
     if (filters.region) result = result.filter((record) => record.location === filters.region);
@@ -78,7 +79,7 @@ function Umkm() {
     setRecords((current) => current.map((record) => record.id === archiveTarget.id ? { ...record, status: "Diarsipkan" } : record));
     setArchiveTarget(null);
   };
-  const clearFilters = () => setFilters({ search: "", region: "", profile: "", stage: "", status: "" });
+  const clearFilters = () => setFilters({ search: "", bottleneck: "", region: "", profile: "", stage: "", status: "" });
   const exportRows = () => exportCsv("sesareng-umkm.csv", visibleRecords, [
     { key: "id", label: "ID" }, { key: "name", label: "Nama" }, { key: "sector", label: "Sektor" }, { key: "location", label: "Wilayah" }, { key: "diagnoseProfile", label: "Profile" }, { key: "primaryBottleneck", label: "Bottleneck" }, { key: "stage", label: "ARPI stage" }, { key: "status", label: "Status" },
   ]);
@@ -96,6 +97,7 @@ function Umkm() {
           <label className="catalog-search"><Search size={16} /><input aria-label="Cari UMKM" onChange={(event) => setFilters((current) => ({ ...current, search: event.target.value }))} placeholder="Cari nama, sektor, bottleneck..." value={filters.search} /></label>
           <select aria-label="Filter wilayah" onChange={(event) => setFilters((current) => ({ ...current, region: event.target.value }))} value={filters.region}><option value="">Semua wilayah</option>{regions.map((region) => <option key={region}>{region}</option>)}</select>
           <select aria-label="Filter profile" onChange={(event) => setFilters((current) => ({ ...current, profile: event.target.value }))} value={filters.profile}><option value="">Semua profile</option><option>Basic Digital</option><option>Targeted AI</option><option>Advanced AI</option></select>
+          <select aria-label="Filter bottleneck" onChange={(event) => setFilters((current) => ({ ...current, bottleneck: event.target.value }))} value={filters.bottleneck}><option value="">Semua bottleneck</option>{[...new Set(records.map((record) => record.primaryBottleneck))].map((item) => <option key={item}>{item}</option>)}</select>
           <select aria-label="Filter ARPI stage" onChange={(event) => setFilters((current) => ({ ...current, stage: event.target.value }))} value={filters.stage}><option value="">Semua tahap</option>{stages.map((stage) => <option key={stage}>{stage}</option>)}</select>
           <select aria-label="Filter status UMKM" onChange={(event) => setFilters((current) => ({ ...current, status: event.target.value }))} value={filters.status}><option value="">Semua status</option><option>Aktif</option><option>Diarsipkan</option></select>
           <button className="admin-button" onClick={clearFilters} type="button">Reset</button>

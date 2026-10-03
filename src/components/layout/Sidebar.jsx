@@ -13,7 +13,7 @@ import {
 import { logoutUser } from "../../logic/auth";
 import imageMap from "../../assets/imageMap";
 
-function Sidebar({ isOpen, onClose }) {
+function Sidebar({ isOpen, isCollapsed, onClose }) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -32,7 +32,7 @@ function Sidebar({ isOpen, onClose }) {
 
       <aside
         className={`dashboard-sidebar ${
-          isOpen ? "sidebar-open" : ""
+          `${isOpen ? "sidebar-open" : ""} ${isCollapsed ? "sidebar-collapsed" : ""}`
         }`}
       >
         <div className="sidebar-brand">
@@ -58,6 +58,7 @@ function Sidebar({ isOpen, onClose }) {
 
           <NavLink
             to="/dashboard"
+            title={isCollapsed ? "Dashboard" : undefined}
             className={({ isActive }) =>
               isActive ? "sidebar-link active" : "sidebar-link"
             }
@@ -73,6 +74,7 @@ function Sidebar({ isOpen, onClose }) {
 
           <NavLink
             to="/umkm"
+            title={isCollapsed ? "UMKM" : undefined}
             className={({ isActive }) =>
               isActive ? "sidebar-link active" : "sidebar-link"
             }
@@ -84,6 +86,7 @@ function Sidebar({ isOpen, onClose }) {
 
           <NavLink
             to="/provider"
+            title={isCollapsed ? "Provider" : undefined}
             className={({ isActive }) =>
               isActive ? "sidebar-link active" : "sidebar-link"
             }
@@ -95,6 +98,7 @@ function Sidebar({ isOpen, onClose }) {
 
           <NavLink
             to="/universitas"
+            title={isCollapsed ? "Perguruan Tinggi" : undefined}
             className={({ isActive }) =>
               isActive ? "sidebar-link active" : "sidebar-link"
             }
@@ -106,6 +110,7 @@ function Sidebar({ isOpen, onClose }) {
 
           <NavLink
             to="/map"
+            title={isCollapsed ? "Peta Ekosistem" : undefined}
             className={({ isActive }) =>
               isActive ? "sidebar-link active" : "sidebar-link"
             }
@@ -121,6 +126,7 @@ function Sidebar({ isOpen, onClose }) {
 
           <NavLink
             to="/arpi"
+            title={isCollapsed ? "Program ARPI" : undefined}
             className={({ isActive }) =>
               isActive ? "sidebar-link active" : "sidebar-link"
             }
@@ -132,7 +138,7 @@ function Sidebar({ isOpen, onClose }) {
         </nav>
 
         <div className="sidebar-bottom">
-          <div className="sidebar-help">
+          <div className="sidebar-help" title={isCollapsed ? "Pusat Bantuan · Panduan penggunaan" : undefined}>
             <HelpCircle size={18} />
 
             <div>
@@ -144,6 +150,7 @@ function Sidebar({ isOpen, onClose }) {
           <button
             type="button"
             className="logout-button"
+            title={isCollapsed ? "Keluar" : undefined}
             onClick={handleLogout}
           >
             <LogOut size={17} />
