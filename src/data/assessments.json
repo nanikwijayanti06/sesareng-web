@@ -1,0 +1,50 @@
+{
+	"dataStatus": "Data simulasi/prototipe",
+	"assessments": [
+		{
+			"id": "AST001",
+			"umkmId": "UMKM001",
+			"businessProcessScore": 72,
+			"workerCapabilityScore": 68,
+			"dataAvailabilityScore": 80,
+			"infrastructureScore": 74,
+			"managementScore": 76,
+			"financialConstraint": "medium",
+			"capabilityConstraint": "medium",
+			"bottleneckScores": { "Demand Planning": 82, "Inventory Management": 56 },
+			"readinessScore": 74,
+			"diagnoseProfile": "Targeted AI",
+			"status": "completed"
+		},
+		{
+			"id": "AST002",
+			"umkmId": "UMKM002",
+			"businessProcessScore": 48,
+			"workerCapabilityScore": 45,
+			"dataAvailabilityScore": 40,
+			"infrastructureScore": 42,
+			"managementScore": 50,
+			"financialConstraint": "high",
+			"capabilityConstraint": "high",
+			"bottleneckScores": { "Data Management": 86, "Inventory Management": 78 },
+			"readinessScore": 45,
+			"diagnoseProfile": "Basic Digital",
+			"status": "completed"
+		},
+		{
+			"id": "AST003",
+			"umkmId": "UMKM003",
+			"businessProcessScore": 88,
+			"workerCapabilityScore": 82,
+			"dataAvailabilityScore": 85,
+			"infrastructureScore": 80,
+			"managementScore": 83,
+			"financialConstraint": "low",
+			"capabilityConstraint": "low",
+			"bottleneckScores": { "Quality Inspection": 88, "Inventory Management": 67 },
+			"readinessScore": 84,
+			"diagnoseProfile": "Advanced AI",
+			"status": "completed"
+		}
+	]
+}

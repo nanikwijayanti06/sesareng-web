@@ -1,0 +1,14 @@
+{
+	"dataStatus": "Data simulasi/prototipe",
+	"items": [
+		{ "id": "LOC001", "name": "Hierro Watch", "type": "UMKM", "detail": "Targeted AI", "diagnoseProfile": "Targeted AI", "region": "Sleman", "stage": "Match", "umkmId": "UMKM001", "assessmentId": "AST001", "interventionId": "INT001", "position": [-7.718, 110.355], "imageKey": "hierroWatch" },
+		{ "id": "LOC002", "name": "Bakpia Kencana", "type": "UMKM", "detail": "Basic Digital", "diagnoseProfile": "Basic Digital", "region": "Sleman", "stage": "Enable", "umkmId": "UMKM002", "assessmentId": "AST002", "interventionId": "INT002", "position": [-7.731, 110.365], "imageKey": "bakpiaKencana" },
+		{ "id": "LOC003", "name": "Batik Astoetik", "type": "UMKM", "detail": "Advanced AI", "diagnoseProfile": "Advanced AI", "region": "Sleman", "stage": "Adopt", "umkmId": "UMKM003", "assessmentId": "AST003", "interventionId": "INT003", "position": [-7.75, 110.36], "imageKey": "batikAstoetik" },
+		{ "id": "LOC004", "name": "Jogja Media Training", "type": "Provider", "detail": "Training Provider", "region": "Sleman", "stage": "Enable", "providerId": "PRV001", "position": [-7.759, 110.378], "imageKey": "jogjaMediaTraining" },
+		{ "id": "LOC005", "name": "Gmedia", "type": "Provider", "detail": "Technology Provider", "region": "Sleman", "stage": "Match", "providerId": "PRV002", "position": [-7.756, 110.376], "imageKey": "gmedia" },
+		{ "id": "LOC006", "name": "UNY", "type": "Perguruan Tinggi", "detail": "Mitra akademik", "region": "Sleman", "stage": "Diagnose", "universityId": "UNI001", "position": [-7.772, 110.388], "imageKey": "uny" },
+		{ "id": "LOC007", "name": "UGM", "type": "Perguruan Tinggi", "detail": "Mitra akademik", "region": "Sleman", "stage": "Verify", "universityId": "UNI002", "position": [-7.771, 110.377], "imageKey": "ugm" },
+		{ "id": "LOC008", "name": "UIN", "type": "Perguruan Tinggi", "detail": "Mitra akademik", "region": "Sleman", "stage": "Diagnose", "universityId": "UNI003", "position": [-7.783, 110.394], "imageKey": "uin" },
+		{ "id": "LOC009", "name": "UII", "type": "Perguruan Tinggi", "detail": "Mitra akademik", "region": "Sleman", "stage": "Adapt", "universityId": "UNI004", "position": [-7.687, 110.414], "imageKey": "uii" }
+	]
+}

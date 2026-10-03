@@ -1,0 +1,12 @@
+{
+  "dataStatus": "Data simulasi/prototipe",
+  "unit": "Nilai agregat simulasi",
+  "timeSeries": [
+    { "month": "Jan", "productivityIndex": 100, "economicValue": 1.8 },
+    { "month": "Feb", "productivityIndex": 104, "economicValue": 1.9 },
+    { "month": "Mar", "productivityIndex": 109, "economicValue": 2.05 },
+    { "month": "Apr", "productivityIndex": 113, "economicValue": 2.2 },
+    { "month": "Mei", "productivityIndex": 119, "economicValue": 2.45 },
+    { "month": "Jun", "productivityIndex": 126, "economicValue": 2.7 }
+  ]
+}

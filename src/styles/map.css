@@ -1,0 +1,26 @@
+.map-admin-toolbar { display: grid; grid-template-columns: minmax(220px, 1fr) repeat(2, minmax(150px, 220px)); gap: 8px; margin: 14px 0 9px; }
+.map-admin-toolbar select { min-width: 0; padding: 0 10px; border: 1px solid #d8e0e8; border-radius: 5px; background: #fff; color: #203247; font: inherit; font-size: 12px; }
+.map-result-count { margin: 9px 0; color: #6b7b8d; font-size: 10px; }
+.map-result-count strong { color: #203247; }
+.map-page .ecosystem-map { height: min(68vh, 690px); min-height: 390px; border-color: #d8e0e8; border-radius: 6px; background: #e8edf2; }
+.map-page .ecosystem-leaflet-map { width: 100%; height: 100%; }
+.detail-drawer-backdrop { position: fixed; z-index: 250; inset: 0; display: flex; justify-content: flex-end; background: #13283f55; }
+.detail-drawer { display: flex; width: min(100%, 430px); height: 100%; flex-direction: column; border-left: 1px solid #d8e0e8; background: #fff; box-shadow: -8px 0 24px #13283f1a; }
+.detail-drawer-header, .detail-drawer-footer { display: flex; align-items: center; justify-content: space-between; gap: 9px; padding: 14px 17px; }
+.detail-drawer-header { border-bottom: 1px solid #e3e8ee; }
+.detail-drawer-header h2 { margin: 0; color: #203247; font-size: 15px; }
+.detail-drawer-content { min-height: 0; flex: 1; overflow-y: auto; padding: 18px; }
+.detail-drawer-footer { flex-wrap: wrap; justify-content: flex-start; border-top: 1px solid #e3e8ee; background: #f8fafc; }
+.map-detail-content > .actor-avatar { width: 54px; height: 54px; margin-bottom: 12px; }
+.map-detail-content h3 { margin: 0 0 8px; color: #203247; font-size: 18px; }
+.map-detail-content > .provider-type-badge { margin-bottom: 16px; }
+.map-detail-content .admin-detail-grid { margin-top: 14px; }
+
+@media (max-width: 680px) {
+	.map-admin-toolbar { grid-template-columns: minmax(0, 1fr); }
+	.map-admin-toolbar .catalog-search, .map-admin-toolbar select { width: 100%; box-sizing: border-box; }
+	.map-page .ecosystem-map { min-height: 350px; height: 58vh; }
+	.detail-drawer { width: 100%; height: min(88vh, 720px); margin-top: auto; border-top: 1px solid #d8e0e8; border-left: 0; border-radius: 7px 7px 0 0; }
+	.detail-drawer-backdrop { align-items: flex-end; }
+	.detail-drawer-footer .admin-button { flex: 1; }
+}

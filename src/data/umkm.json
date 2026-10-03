@@ -1,0 +1,41 @@
+{
+	"dataStatus": "Data simulasi/prototipe",
+	"items": [
+		{
+			"id": "UMKM001",
+			"name": "Hierro Watch",
+			"sector": "Belum diklasifikasikan",
+			"diagnoseProfile": "Targeted AI",
+			"location": "Sleman",
+			"stage": "Match",
+			"status": "Aktif",
+			"assessmentId": "AST001",
+			"interventionId": "INT001",
+			"imageKey": "hierroWatch"
+		},
+		{
+			"id": "UMKM002",
+			"name": "Bakpia Kencana",
+			"sector": "Belum diklasifikasikan",
+			"diagnoseProfile": "Basic Digital",
+			"location": "Sleman",
+			"stage": "Enable",
+			"status": "Aktif",
+			"assessmentId": "AST002",
+			"interventionId": "INT002",
+			"imageKey": "bakpiaKencana"
+		},
+		{
+			"id": "UMKM003",
+			"name": "Batik Astoetik",
+			"sector": "Belum diklasifikasikan",
+			"diagnoseProfile": "Advanced AI",
+			"location": "Sleman",
+			"stage": "Adopt",
+			"status": "Aktif",
+			"assessmentId": "AST003",
+			"interventionId": "INT003",
+			"imageKey": "batikAstoetik"
+		}
+	]
+}

@@ -1,0 +1,9 @@
+{
+	"dataStatus": "Data simulasi/prototipe",
+	"items": [
+		{ "id": "UNI001", "name": "UNY", "shortName": "UNY", "location": "Sleman", "role": "Capacity development, AI Adoption Clinic, productivity measurement", "specialization": "Capacity development", "status": "Aktif", "assignments": [], "imageKey": "uny" },
+		{ "id": "UNI002", "name": "UGM", "shortName": "UGM", "location": "Sleman", "role": "Productivity assessment, AI Adoption Clinic, productivity measurement", "specialization": "Productivity assessment", "status": "Aktif", "assignments": [], "imageKey": "ugm" },
+		{ "id": "UNI003", "name": "UIN", "shortName": "UIN", "location": "Sleman", "role": "Capacity development, productivity measurement", "specialization": "Capacity development", "status": "Aktif", "assignments": [], "imageKey": "uin" },
+		{ "id": "UNI004", "name": "UII", "shortName": "UII", "location": "Sleman", "role": "AI Adoption Clinic, productivity measurement", "specialization": "AI Adoption Clinic", "status": "Aktif", "assignments": [], "imageKey": "uii" }
+	]
+}

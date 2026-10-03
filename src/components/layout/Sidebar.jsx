@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 
 import { logoutUser } from "../../logic/auth";
+import imageMap from "../../assets/imageMap";
 
 function Sidebar({ isOpen, onClose }) {
   const navigate = useNavigate();
@@ -36,31 +37,34 @@ function Sidebar({ isOpen, onClose }) {
       >
         <div className="sidebar-brand">
           <div className="sidebar-logo">
-            S
+            {imageMap.logoSesareng ? (
+              <img
+                src={imageMap.logoSesareng}
+                alt="Logo Sesareng"
+              />
+            ) : (
+              <span>S</span>
+            )}
           </div>
 
-          <div>
+          <div className="sidebar-brand-copy">
             <strong>SESARENG</strong>
             <small>Government Portal</small>
           </div>
         </div>
 
         <nav className="sidebar-nav">
-          <p className="sidebar-section-title">
-            UTAMA
-          </p>
+          <p className="sidebar-section-title">UTAMA</p>
 
           <NavLink
             to="/dashboard"
             className={({ isActive }) =>
-              isActive
-                ? "sidebar-link active"
-                : "sidebar-link"
+              isActive ? "sidebar-link active" : "sidebar-link"
             }
             onClick={onClose}
           >
             <LayoutDashboard size={18} />
-            Dashboard
+            <span>Dashboard</span>
           </NavLink>
 
           <p className="sidebar-section-title sidebar-space">
@@ -70,53 +74,45 @@ function Sidebar({ isOpen, onClose }) {
           <NavLink
             to="/umkm"
             className={({ isActive }) =>
-              isActive
-                ? "sidebar-link active"
-                : "sidebar-link"
+              isActive ? "sidebar-link active" : "sidebar-link"
             }
             onClick={onClose}
           >
             <Store size={18} />
-            UMKM
+            <span>UMKM</span>
           </NavLink>
 
           <NavLink
             to="/provider"
             className={({ isActive }) =>
-              isActive
-                ? "sidebar-link active"
-                : "sidebar-link"
+              isActive ? "sidebar-link active" : "sidebar-link"
             }
             onClick={onClose}
           >
             <Building2 size={18} />
-            Provider
+            <span>Provider</span>
           </NavLink>
 
           <NavLink
             to="/universitas"
             className={({ isActive }) =>
-              isActive
-                ? "sidebar-link active"
-                : "sidebar-link"
+              isActive ? "sidebar-link active" : "sidebar-link"
             }
             onClick={onClose}
           >
             <GraduationCap size={18} />
-            Perguruan Tinggi
+            <span>Perguruan Tinggi</span>
           </NavLink>
 
           <NavLink
             to="/map"
             className={({ isActive }) =>
-              isActive
-                ? "sidebar-link active"
-                : "sidebar-link"
+              isActive ? "sidebar-link active" : "sidebar-link"
             }
             onClick={onClose}
           >
             <MapPinned size={18} />
-            Peta Ekosistem
+            <span>Peta Ekosistem</span>
           </NavLink>
 
           <p className="sidebar-section-title sidebar-space">
@@ -126,14 +122,12 @@ function Sidebar({ isOpen, onClose }) {
           <NavLink
             to="/arpi"
             className={({ isActive }) =>
-              isActive
-                ? "sidebar-link active"
-                : "sidebar-link"
+              isActive ? "sidebar-link active" : "sidebar-link"
             }
             onClick={onClose}
           >
             <Workflow size={18} />
-            Program ARPI
+            <span>Program ARPI</span>
           </NavLink>
         </nav>
 
@@ -148,11 +142,12 @@ function Sidebar({ isOpen, onClose }) {
           </div>
 
           <button
+            type="button"
             className="logout-button"
             onClick={handleLogout}
           >
             <LogOut size={17} />
-            Keluar
+            <span>Keluar</span>
           </button>
         </div>
       </aside>

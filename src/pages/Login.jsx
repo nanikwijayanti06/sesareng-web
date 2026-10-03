@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../logic/auth";
+import imageMap from "../assets/imageMap";
 import "../styles/login.css";
 
 function Login() {
@@ -39,9 +40,17 @@ function Login() {
 
   return (
     <main className="government-login">
+      {/* TOP BRAND */}
       <header className="top-brand">
         <div className="brand-symbol">
-          <span></span>
+          {imageMap.logoSesareng ? (
+            <img
+              src={imageMap.logoSesareng}
+              alt="Logo Sesareng"
+            />
+          ) : (
+            <span>S</span>
+          )}
         </div>
 
         <div className="brand-text">
@@ -65,9 +74,14 @@ function Login() {
               pendukung Sesareng.
             </p>
 
-            <form onSubmit={handleSubmit} className="main-form">
+            <form
+              onSubmit={handleSubmit}
+              className="main-form"
+            >
               <div className="field-group">
-                <label htmlFor="email">Email</label>
+                <label htmlFor="email">
+                  Email
+                </label>
 
                 <input
                   id="email"
@@ -81,12 +95,18 @@ function Login() {
               </div>
 
               <div className="field-group">
-                <label htmlFor="password">Password</label>
+                <label htmlFor="password">
+                  Password
+                </label>
 
                 <div className="password-field">
                   <input
                     id="password"
-                    type={showPassword ? "text" : "password"}
+                    type={
+                      showPassword
+                        ? "text"
+                        : "password"
+                    }
                     name="password"
                     value={form.password}
                     onChange={handleChange}
@@ -98,10 +118,14 @@ function Login() {
                     type="button"
                     className="show-password"
                     onClick={() =>
-                      setShowPassword((prev) => !prev)
+                      setShowPassword(
+                        (prev) => !prev
+                      )
                     }
                   >
-                    {showPassword ? "Hide" : "Show"}
+                    {showPassword
+                      ? "Hide"
+                      : "Show"}
                   </button>
                 </div>
               </div>
@@ -112,7 +136,10 @@ function Login() {
                 </div>
               )}
 
-              <button type="submit" className="login-submit">
+              <button
+                type="submit"
+                className="login-submit"
+              >
                 Masuk ke Dashboard
               </button>
             </form>
@@ -121,8 +148,13 @@ function Login() {
               <span>Akun prototype</span>
 
               <div className="demo-info">
-                <strong>pemda@sesareng.id</strong>
-                <p>Password: 123456</p>
+                <strong>
+                  pemda@sesareng.id
+                </strong>
+
+                <p>
+                  Password: 123456
+                </p>
               </div>
             </div>
 
@@ -138,8 +170,22 @@ function Login() {
             <div className="orbit orbit-one"></div>
             <div className="orbit orbit-two"></div>
 
+            {/* LOGO SESARENG CENTER */}
+            <div className="visual-logo">
+              {imageMap.logoSesareng ? (
+                <img
+                  src={imageMap.logoSesareng}
+                  alt="Logo Sesareng"
+                />
+              ) : (
+                <span>S</span>
+              )}
+            </div>
+
             <div className="bubble government-bubble">
-              <span className="bubble-icon">🏛</span>
+              <span className="bubble-icon">
+                🏛
+              </span>
 
               <div className="bubble-tooltip">
                 Pemerintah
@@ -147,7 +193,9 @@ function Login() {
             </div>
 
             <div className="bubble umkm-bubble">
-              <span className="bubble-icon">🏪</span>
+              <span className="bubble-icon">
+                🏪
+              </span>
 
               <div className="bubble-tooltip">
                 UMKM
@@ -155,7 +203,9 @@ function Login() {
             </div>
 
             <div className="bubble provider-bubble">
-              <span className="bubble-icon">⚙</span>
+              <span className="bubble-icon">
+                ⚙
+              </span>
 
               <div className="bubble-tooltip">
                 Provider
@@ -163,7 +213,9 @@ function Login() {
             </div>
 
             <div className="bubble university-bubble">
-              <span className="bubble-icon">🎓</span>
+              <span className="bubble-icon">
+                🎓
+              </span>
 
               <div className="bubble-tooltip">
                 Perguruan Tinggi
@@ -171,7 +223,9 @@ function Login() {
             </div>
 
             <div className="bubble map-bubble">
-              <span className="bubble-icon">⌖</span>
+              <span className="bubble-icon">
+                ⌖
+              </span>
 
               <div className="bubble-tooltip">
                 Peta Ekosistem
@@ -179,7 +233,9 @@ function Login() {
             </div>
 
             <div className="bubble arpi-bubble">
-              <span className="bubble-icon">◎</span>
+              <span className="bubble-icon">
+                ◎
+              </span>
 
               <div className="bubble-tooltip">
                 Program ARPI
@@ -210,9 +266,20 @@ function Login() {
         </section>
       </div>
 
+      {/* FOOTER */}
       <footer className="login-footer">
         <div className="footer-brand">
-          <div className="footer-symbol"></div>
+          <div className="footer-symbol">
+            {imageMap.logoSesareng ? (
+              <img
+                src={imageMap.logoSesareng}
+                alt="Logo Sesareng"
+              />
+            ) : (
+              <span>S</span>
+            )}
+          </div>
+
           <strong>SESARENG</strong>
         </div>
 

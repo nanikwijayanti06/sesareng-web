@@ -1,0 +1,41 @@
+{
+	"dataStatus": "Data simulasi/prototipe",
+	"stages": [
+		{ "name": "Diagnose", "description": "Identifikasi kondisi awal, kebutuhan, dan hambatan produktivitas UMKM.", "outcome": "Peta kebutuhan dan profil kesiapan" },
+		{ "name": "Match", "description": "Hubungkan kebutuhan usaha dengan provider dan mitra yang relevan.", "outcome": "Rencana intervensi dan mitra terpilih" },
+		{ "name": "Enable", "description": "Siapkan kemampuan, teknologi, dan dukungan yang diperlukan.", "outcome": "Intervensi siap diterapkan" },
+		{ "name": "Adopt", "description": "Dampingi penerapan praktik baru dalam kegiatan operasional usaha.", "outcome": "Praktik baru mulai digunakan" },
+		{ "name": "Verify", "description": "Ukur hasil penerapan menggunakan indikator yang disepakati.", "outcome": "Hasil terukur untuk evaluasi" },
+		{ "name": "Adapt", "description": "Gunakan hasil evaluasi untuk menyesuaikan intervensi berikutnya.", "outcome": "Rencana tindak lanjut" }
+	],
+	"interventions": [
+		{ "id": "INT001", "name": "Demand Forecasting", "bottleneck": "Demand Planning", "requiresAI": true, "providerId": "PRV002", "universityId": "UNI002", "description": "Peramalan permintaan berbasis data penjualan yang tersedia." },
+		{ "id": "INT002", "name": "Basic Digital Inventory Management", "bottleneck": "Data Management", "requiresAI": false, "providerId": "PRV001", "universityId": "UNI001", "description": "Pencatatan dan pengelolaan stok digital tanpa kewajiban AI." },
+		{ "id": "INT003", "name": "AI-assisted Quality Inspection", "bottleneck": "Quality Inspection", "requiresAI": true, "providerId": "PRV002", "universityId": "UNI004", "description": "Uji inspeksi mutu berbantuan AI dengan pengawasan manusia." }
+	],
+	"matches": [
+		{ "umkmId": "UMKM001", "interventionId": "INT001", "aiAppropriateness": "Tinggi", "status": "Recommended" },
+		{ "umkmId": "UMKM002", "interventionId": "INT002", "aiAppropriateness": "AI tidak diperlukan", "status": "Review" },
+		{ "umkmId": "UMKM003", "interventionId": "INT003", "aiAppropriateness": "Tinggi", "status": "Recommended" }
+	],
+	"enable": [
+		{ "umkmId": "UMKM001", "interventionId": "INT001", "voucherAllocation": 10000000, "voucherUsed": 4000000, "trainingProgram": "Targeted training: demand planning", "capabilityGap": "Perencanaan permintaan", "trainingProviderId": "PRV001", "status": "Berjalan" },
+		{ "umkmId": "UMKM002", "interventionId": "INT002", "voucherAllocation": 5000000, "voucherUsed": 1000000, "trainingProgram": "Targeted training: pencatatan digital", "capabilityGap": "Pengelolaan data dasar", "trainingProviderId": "PRV001", "status": "Berjalan" },
+		{ "umkmId": "UMKM003", "interventionId": "INT003", "voucherAllocation": 12000000, "voucherUsed": 8000000, "trainingProgram": "Targeted training: inspeksi mutu", "capabilityGap": "Integrasi pemeriksaan mutu", "trainingProviderId": "PRV001", "status": "Selesai" }
+	],
+	"adopt": [
+		{ "umkmId": "UMKM001", "interventionId": "INT001", "providerId": "PRV002", "universityId": "UNI002", "checklist": [{ "id": "data", "label": "Persiapan data", "completed": true }, { "id": "workflow", "label": "Integrasi workflow", "completed": true }, { "id": "config", "label": "Konfigurasi solusi", "completed": false }, { "id": "trial", "label": "Uji coba", "completed": false }, { "id": "live", "label": "Go live", "completed": false }], "clinicStatus": "Berjalan" },
+		{ "umkmId": "UMKM002", "interventionId": "INT002", "providerId": "PRV001", "universityId": "UNI001", "checklist": [{ "id": "data", "label": "Persiapan data", "completed": true }, { "id": "workflow", "label": "Integrasi workflow", "completed": true }, { "id": "config", "label": "Konfigurasi solusi", "completed": true }, { "id": "trial", "label": "Uji coba", "completed": false }, { "id": "live", "label": "Go live", "completed": false }], "clinicStatus": "Berjalan" },
+		{ "umkmId": "UMKM003", "interventionId": "INT003", "providerId": "PRV002", "universityId": "UNI004", "checklist": [{ "id": "data", "label": "Persiapan data", "completed": true }, { "id": "workflow", "label": "Integrasi workflow", "completed": true }, { "id": "config", "label": "Konfigurasi solusi", "completed": true }, { "id": "trial", "label": "Uji coba", "completed": true }, { "id": "live", "label": "Go live", "completed": false }], "clinicStatus": "Berjalan" }
+	],
+	"verify": [
+		{ "umkmId": "UMKM001", "metrics": [{ "key": "productivityIndex", "label": "Productivity Index", "before": 100, "after": 112, "target": 110, "actual": 112, "unit": "index" }, { "key": "leadTime", "label": "Lead Time", "before": 5, "after": 3.5, "target": 4, "actual": 3.5, "unit": "hari", "lowerIsBetter": true }, { "key": "wasteInventory", "label": "Waste Inventory", "before": 14, "after": 8, "target": 9, "actual": 8, "unit": "%", "lowerIsBetter": true }, { "key": "economicValue", "label": "Nilai Ekonomi", "before": 1.8, "after": 2.1, "target": 2, "actual": 2.1, "unit": "juta" }] },
+		{ "umkmId": "UMKM002", "metrics": [{ "key": "productivityIndex", "label": "Productivity Index", "before": 100, "after": 104, "target": 110, "actual": 104, "unit": "index" }, { "key": "leadTime", "label": "Lead Time", "before": 6, "after": 5, "target": 4, "actual": 5, "unit": "hari", "lowerIsBetter": true }, { "key": "wasteInventory", "label": "Waste Inventory", "before": 16, "after": 14, "target": 10, "actual": 14, "unit": "%", "lowerIsBetter": true }, { "key": "economicValue", "label": "Nilai Ekonomi", "before": 1.3, "after": 1.5, "target": 1.8, "actual": 1.5, "unit": "juta" }] },
+		{ "umkmId": "UMKM003", "metrics": [{ "key": "productivityIndex", "label": "Productivity Index", "before": 100, "after": 118, "target": 115, "actual": 118, "unit": "index" }, { "key": "leadTime", "label": "Lead Time", "before": 4, "after": 3.5, "target": 3, "actual": 3.5, "unit": "hari", "lowerIsBetter": true }, { "key": "wasteInventory", "label": "Waste Inventory", "before": 12, "after": 8, "target": 9, "actual": 8, "unit": "%", "lowerIsBetter": true }, { "key": "economicValue", "label": "Nilai Ekonomi", "before": 2, "after": 2.5, "target": 2.3, "actual": 2.5, "unit": "juta" }] }
+	],
+	"adapt": [
+		{ "umkmId": "UMKM001", "verifiedResult": "Strong result", "eligibleToScale": true, "reason": "Sebagian besar target dampak tercapai.", "nextAction": "Perluas pengujian ke proses terkait.", "responsibleActor": "Gmedia dan UGM", "followUpStatus": "Perlu dijadwalkan" },
+		{ "umkmId": "UMKM002", "verifiedResult": "Partial result", "eligibleToScale": false, "reason": "Kualitas pencatatan perlu diperbaiki sebelum intervensi lanjutan.", "nextAction": "Lanjutkan pendampingan pencatatan digital.", "responsibleActor": "Jogja Media Training dan UNY", "followUpStatus": "Berjalan" },
+		{ "umkmId": "UMKM003", "verifiedResult": "Strong result", "eligibleToScale": true, "reason": "Indeks produktivitas dan pengurangan waste menunjukkan hasil kuat.", "nextAction": "Validasi konsistensi hasil sebelum scale-up.", "responsibleActor": "Gmedia dan UII", "followUpStatus": "Perlu dijadwalkan" }
+	]
+}

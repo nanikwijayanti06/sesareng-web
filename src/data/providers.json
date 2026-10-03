@@ -1,0 +1,27 @@
+{
+	"dataStatus": "Data simulasi/prototipe",
+	"items": [
+		{
+			"id": "PRV001",
+			"name": "Jogja Media Training",
+			"type": "Training Provider",
+			"location": "Sleman",
+			"accredited": true,
+			"status": "Aktif",
+			"assignments": [],
+			"capabilities": ["Targeted training", "Capability development"],
+			"imageKey": "jogjaMediaTraining"
+		},
+		{
+			"id": "PRV002",
+			"name": "Gmedia",
+			"type": "Technology Provider",
+			"location": "Sleman",
+			"accredited": true,
+			"status": "Aktif",
+			"assignments": [],
+			"capabilities": ["Technology solutions", "Data and workflow integration"],
+			"imageKey": "gmedia"
+		}
+	]
+}
